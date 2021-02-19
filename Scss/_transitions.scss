@@ -1,0 +1,10 @@
+@keyframes cookies {
+  0%{
+    opacity: 0;
+  }
+
+  100%{
+    transform: translateY(-90%);
+    opacity: 0.8;
+  }
+}

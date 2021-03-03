@@ -1,3 +1,8 @@
+fetch('http://localhost:8000/Cameras')
+    .then(function (response) {
+    var NewProduct = response.headers;
+    console.log(NewProduct);
+});
 //brands
 var cameraBrands = ["sony", "Nikon", "Canon", "FujiFilm", "Lumix", "Kodak", "Blackmagic"];
 //opisy

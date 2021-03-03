@@ -97,7 +97,7 @@ ul{
   margin: 0;
 }
 
-#btn1, #btn2, #btn3, #btn4{
+#btn1, #btn2, #btn3, #btn4, #btn5{
   margin: 0;
   margin-right: 15px;
   width: 6.5vh;
@@ -120,11 +120,16 @@ ul{
 
 #btn4{
   background-color: $btn4-color;
+}
+
+#btn5{
+  background-color: $btn5-color;
   margin-right: 200px;
 }
 
 button svg{
   transform: scale(0.75);
+  display: flex;
 }
 
 button svg:hover{
@@ -313,4 +318,62 @@ button svg:hover{
   font-size: 110%;
   margin-top: 1.5vh;
   display: grid;
+}
+
+//registerHTML
+.register{
+  width: 30vh;
+  height: 50vh;
+  background-color: #CFCFCF;
+  display: flex;
+  border-radius: 15px;
+  display: grid;
+  grid-column: 3;
+  margin-top: 45%;
+}
+
+.top{
+  height: 5vh;
+  width: 100%;
+  background-color: #E74C3C;
+  border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
+  text-align: center;
+}
+
+.top p{
+  margin-top: 1.5vh;
+  font-family: Inter;
+  font-size: 120%;
+}
+
+#email--register, #Name--register, #Nick--register, #password--register, #passwordReapete--register{
+  width: 70%;
+  height: 35%;
+  margin-top: -5vh;
+  border: 3px solid #E74C3C;
+  outline: none;
+}
+
+#rulesAcc{
+  height: 2vh;
+  width: 2vh;
+  margin-top: -5vh;
+}
+
+#reg-p{
+  margin-top: 1.5vh;
+  font-family: Inter;
+  margin-top: -5vh;
+}
+
+#register-sbmt{
+  width: 25%;
+  height: 40%;
+  border: 3px solid #E74C3C;
+  outline: none;
+}
+
+#register-sbmt:hover{
+  cursor: pointer;
 }

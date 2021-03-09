@@ -386,4 +386,34 @@ button svg:hover {
   cursor: pointer;
 }
 
+.login {
+  width: 30vh;
+  height: 25vh;
+  background-color: #CFCFCF;
+  display: flex;
+  border-radius: 15px;
+  display: grid;
+  grid-column: 3;
+  margin-top: 45%;
+}
+
+#Nick--login, #password--login {
+  width: 70%;
+  height: 50%;
+  margin-top: -1vh;
+  border: 3px solid #E74C3C;
+  outline: none;
+}
+
+#login-sbmt {
+  width: 25%;
+  height: 40%;
+  border: 3px solid #E74C3C;
+  outline: none;
+}
+
+#login-sbmt:hover {
+  cursor: pointer;
+}
+
 /*# sourceMappingURL=main.css.map */

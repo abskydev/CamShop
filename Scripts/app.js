@@ -11,23 +11,8 @@ const app = express();
 let hostname = '127.0.0.1';
 let port = 8000;
 
-let connection = mysql.createConnection({
-    host: 'remotemysql.com',
-    port: 3306,
-    user: 'sN99bC7mfM',
-    password: 'EcjOZ5pTnr',
-    database: 'sN99bC7mfM',
-});
-
-connection.connect(function (err) {
-    if (err) throw err;
-    connection.query('SELECT COUNT(*) FROM cameras', function (err, rows, fields){
-        if (err) throw err;
-        console.log(rows);
-    });
-});
-
 app.use(cors());
+
 app.use ('/Cameras', (req, res) => {
 
     let connection = mysql.createConnection({
@@ -52,7 +37,6 @@ app.use ('/Cameras', (req, res) => {
          });
      });
 });
-
 
 app.get('/', (req, res) => {
    res.send('homeAPI');

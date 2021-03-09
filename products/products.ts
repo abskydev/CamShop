@@ -226,7 +226,7 @@ function registerUser() {
                         if (Acc.checked == true) {
                             onload(UA);
                         } else {
-                            alert('Rules Accept is required to create account')
+                            alert('Rules Accept is required to create account');
                         }
                     }
                 }
@@ -234,3 +234,4 @@ function registerUser() {
         }
     }
 }
+

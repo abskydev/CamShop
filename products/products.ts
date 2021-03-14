@@ -5,7 +5,7 @@ let onStock = []
 let sale = []
 let used = []
 
-fetch('http://127.0.0.1:8000/Cameras')
+fetch('http://127.0.0.1:6996/Cameras')
     .then(res => res.json())
     .then (data => {
         let CamProduct = data;

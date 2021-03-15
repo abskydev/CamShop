@@ -17,7 +17,6 @@ const passport = require('passport')
 const flash = require('express-flash')
 const session = require('express-session')
 const methodOverride = require('method-override')
-const localStorage = require('node-localstorage')
 
 const app = express();
 let hostname = '127.0.0.1';
@@ -164,7 +163,7 @@ app.post('/register', async (req, res) => {
                  errorEN: 'Error with sending data to database - data administrator has notified',
                  errorPL: 'Błąd przy wysyłaniu danych do bazy danych - administrator danych został powiadomiony',
                  errCode: 'errDB'
-             } )
+             })
          })
      }
      console.log(users)
@@ -172,8 +171,7 @@ app.post('/register', async (req, res) => {
 })
 
 app.post('/login', (req, res) => {
-    let sqlTwo = 'SELECT password FROM users WHERE email = ' + req.body.email;
-    console.log(sqlTwo)
+    let sqlTwo = 'SELECT password FROM users WHERE email = ' + "'" + req.body.email + "'";
 
         let connection = mysql.createConnection({
             host: 'remotemysql.com',
@@ -185,16 +183,39 @@ app.post('/login', (req, res) => {
 
         connection.connect(function (err) {
             if (err) throw err;
-            console.log("Connected!");
+            console.log("Connected to db RESTapi-login " + Date.now());
         })
 
-        connection.query(sqlTwo, function (err, rows, fields) {
+        connection.query(sqlTwo, function (err, rows, result) {
             if (err) throw err;
-            console.log(rows)
-        })
 
-        bcrypt.compare(req.body.password, rows.json(), function (err, result) {
-
+            bcrypt.compare(req.body.password, rows[0].password, function (err, result) {
+                if (result === true) {
+                    res.redirect('/')
+                }else{
+                    if (err) {
+                        app.get('/err', (req, res )=> {
+                            res.render('error.ejs', {
+                                errorEN: 'Internal error with validation data and form. more --' + err,
+                                errorPL: 'Wewnętrzny błąd przy walidacji danych i formularza więcej -- ' + err,
+                                errCode: 'errInternal' + err
+                            })
+                        })
+                        res.redirect('/err')
+                    }else{
+                        if (result === false) {
+                            app.get('/err', (req, res )=> {
+                                res.render('error.ejs', {
+                                    errorEN: 'Error -- incorrect password',
+                                    errorPL: 'Błąd -- niepoprawne hasło',
+                                    errCode: 'errIncPword'
+                                })
+                            })
+                            res.redirect('/err')
+                        }
+                    }
+                }
+            })
         })
 })
 

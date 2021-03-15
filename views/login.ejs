@@ -1,4 +1,13 @@
-<script src="/loginJS.js"></script>
+<script>
+  function getHash() {
+    fetch('http://127.0.0.1:6996/')
+      .then(res => console.log(res))
+      .then(data => {
+        console.log(data);
+        document.getElementById('getHash').innerHTML=(data);
+      })
+  }
+</script>
 <h1>Login</h1>
 <form action="/login" method="POST">
   <div>
@@ -9,6 +18,7 @@
     <label for="password">Password</label>
     <input type="password" id="password" name="password" required minlength="10">
   </div>
-  <button type="submit" onclick="submit()">Login</button>
+  <button type="submit" onclick="getHash()">Login</button>
 </form>
+<h6 tyle="display: none" id="getHash"></h6>
 <a href="/register">Register</a>

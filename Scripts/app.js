@@ -17,6 +17,7 @@ const passport = require('passport')
 const flash = require('express-flash')
 const session = require('express-session')
 const methodOverride = require('method-override')
+const localStorage = require('node-localstorage')
 
 const app = express();
 let hostname = '127.0.0.1';
@@ -60,6 +61,11 @@ app.get('/basescript.js', (req, res) => {
     res.sendFile(path.join(__dirname+'/basescript.js'))
 })
 
+
+app.get('/loginJS.js', (req, res) => {
+    res.sendFile(path.join(__dirname+'/loginJS.js'))
+})
+
 app.get('/img/1-png.png', (req, res) => {
     res.sendFile(path.join(__dirname+'/1-png.png'))
 })
@@ -67,6 +73,8 @@ app.get('/img/1-png.png', (req, res) => {
 app.get('/favicon.ico', (req, res) =>{
     res.sendFile(path.join(__dirname+'/favicon.ico'))
 })
+
+
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname+'/index.html'));
@@ -91,66 +99,6 @@ app.get('/api', (req, res) => {
 
 app.get('/login', (req, res) => {
     res.render('login.ejs')
-})
-
-app.post('/login', (req, res) => {
-
-    let connection = mysql.createConnection({
-        host: 'remotemysql.com',
-        port: 3306,
-        user: 'sN99bC7mfM',
-        password: 'EcjOZ5pTnr',
-        database: 'sN99bC7mfM',
-    });
-
-    connection.connect(function (err) {
-        if (err) throw err;
-        console.log("Connected!");
-    });
-    let email = "'" + req.body.email + "'";
-    let sql = 'SELECT email FROM users WHERE email = ' + email;
-    let sqlTwo = 'SELECT password FROM users WHERE email = ' + email;
-    console.log(sql)
-
-    connection.connect(function (err) {
-        if (err) throw err;
-        connection.query(sql, function (err, rows, fields) {
-            if (err) throw err;
-            if (rows == '') {
-                console.log('error')
-                app.get('/err', (req1, res) => {
-                    res.render('error.ejs', {
-                        errorEN: 'Error -- Email incorrect',
-                        errorPL: 'Błąd -- Niepoprawny email',
-                        errCode: 'errIenmail'
-                    })
-                })
-                res.redirect('/err')
-            }else{
-                connection.query(sqlTwo, function (err, rows, fields) {
-                    if (err) throw err;
-                    console.log(rows)
-
-                    const hash = bcrypt.hash(req.body.password, 10)
-                    console.log(hash)
-                    if (rows == hash){
-                        console.log('tak')
-                        res.redirect('/')
-                    }else{
-                        console.log('niet')
-                        app.get('/err', (req, res) => {
-                            res.render('error.ejs', {
-                                errorEN: 'Error -- Password is incorrect',
-                                errorPL: 'Błąd -- Hasło jest niepoprawne',
-                                errCode: 'errIpNw'
-                            })
-                        })
-                        res.redirect('/err')
-                    }
-                });
-            }
-        });
-    });
 })
 
 app.get('/register', (req, res) => {
@@ -221,6 +169,33 @@ app.post('/register', async (req, res) => {
      }
      console.log(users)
     }
+})
+
+app.post('/login', (req, res) => {
+    let sqlTwo = 'SELECT password FROM users WHERE email = ' + req.body.email;
+    console.log(sqlTwo)
+
+        let connection = mysql.createConnection({
+            host: 'remotemysql.com',
+            port: 3306,
+            user: 'sN99bC7mfM',
+            password: 'EcjOZ5pTnr',
+            database: 'sN99bC7mfM',
+        });
+
+        connection.connect(function (err) {
+            if (err) throw err;
+            console.log("Connected!");
+        })
+
+        connection.query(sqlTwo, function (err, rows, fields) {
+            if (err) throw err;
+            console.log(rows)
+        })
+
+        bcrypt.compare(req.body.password, rows.json(), function (err, result) {
+
+        })
 })
 
 app.listen(6996);

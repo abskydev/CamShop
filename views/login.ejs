@@ -1,3 +1,4 @@
+<script src="/loginJS.js"></script>
 <h1>Login</h1>
 <form action="/login" method="POST">
   <div>
@@ -8,6 +9,6 @@
     <label for="password">Password</label>
     <input type="password" id="password" name="password" required minlength="10">
   </div>
-  <button type="submit">Login</button>
+  <button type="submit" onclick="submit()">Login</button>
 </form>
 <a href="/register">Register</a>

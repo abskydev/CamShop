@@ -109,6 +109,7 @@ ul {
 #btn1, #btn2, #btn3, #btn4, #btn5 {
   margin: 0;
   margin-right: 15px;
+  margin-bottom: 15px;
   width: 6.5vh;
   height: 100%;
   outline: none;

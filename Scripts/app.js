@@ -1,3 +1,5 @@
+let userInfo = []
+
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config()
 }
@@ -8,7 +10,6 @@ if (process.env.NODE_ENV !== 'production') {
 require('dotenv').config();
 const mysql = require('mysql2');
 const http = require("http");
-const cors = require("cors");
 const path = require('path');
 
 const express = require('express')
@@ -18,11 +19,11 @@ const flash = require('express-flash')
 const session = require('express-session')
 const methodOverride = require('method-override')
 
+const localStorage = require('localstorage')
+
 const app = express();
 let hostname = '127.0.0.1';
-let port = 6996;
-
-const users = []
+let port = 6969;
 
 app.use ('/Cameras', (req, res) => {
 
@@ -77,6 +78,7 @@ app.get('/favicon.ico', (req, res) =>{
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname+'/index.html'));
+    let userStatus = "registered";
 })
 
 //
@@ -94,6 +96,18 @@ app.use(methodOverride('_method'))
 
 app.get('/api', (req, res) => {
     res.render('index.ejs', { name: req.user.name })
+})
+
+app.get('/blog', (req, res) => {
+    if (userInfo.length > 0) {
+        res.render('blog.ejs')
+    }else{
+        res.render('pleaseLogin.ejs')
+    }
+})
+
+app.get('/store', (req, res) => {
+    res.render('store.ejs')
 })
 
 app.get('/login', (req, res) => {
@@ -131,14 +145,6 @@ app.post('/register', async (req, res) => {
                 });
 
          const hashedPassword = await bcrypt.hash(req.body.password, 10)
-          users.push({
-              id: Date.now().toString(),
-              name: req.body.name,
-              Surname: req.body.Surname,
-              Nick: req.body.Nick,
-              email: req.body.email,
-              password: hashedPassword
-          })
 
                  let id = "'" + Date.now().toString() + "'";
                  let name = "'" + req.body.name + "'";
@@ -149,15 +155,19 @@ app.post('/register', async (req, res) => {
 
                  let sql = 'INSERT INTO users (id, name, surname, nick, email, password) VALUES (' + id + ', ' + name + ', ' + surname + ', ' + nick + ', ' + email + ', ' + pWord + ')';
           connection.connect(function (err) {
-               if (err) throw err;
-               connection.query(sql, function (err, rows, fields) {
-                    if (err) throw err;
-               });
+              if (err) {
+                  console.log(err)
+              }
+          })
+          connection.query(sql, function (err, rows, fields) {
+              if (err) {
+                  console.log(err)
+              }
           });
 
-          res.redirect('login')
+          res.redirect('/login')
      } catch {
-         res.redirect('err')
+         res.redirect('/err')
          app.get('/err', (req, res )=> {
              res.render('error.ejs', {
                  errorEN: 'Error with sending data to database - data administrator has notified',
@@ -166,7 +176,6 @@ app.post('/register', async (req, res) => {
              })
          })
      }
-     console.log(users)
     }
 })
 
@@ -191,6 +200,19 @@ app.post('/login', (req, res) => {
 
             bcrypt.compare(req.body.password, rows[0].password, function (err, result) {
                 if (result === true) {
+                    let sqlThree = 'SELECT * FROM users WHERE email = ' + "'" + req.body.email + "'"
+                    connection.query(sqlThree, function (err, rows) {
+                        if (err) throw err
+                        userInfo.splice(0,100)
+                        userInfo.push(rows[0].id)
+                        userInfo.push({
+                            name: rows[0].name,
+                            surname: rows[0].surname,
+                            nick: rows[0].nick,
+                            email: rows[0].email
+                        })
+                        console.log(userInfo)
+                    })
                     res.redirect('/')
                 }else{
                     if (err) {
@@ -219,5 +241,9 @@ app.post('/login', (req, res) => {
         })
 })
 
-app.listen(6996);
+app.get('/cart', (req, res) => {
+    res.render('cart.ejs')
+})
+
+app.listen(6969);
 console.log('Server listening on ' + "http://" + hostname + ':' + port);

@@ -1,4 +1,3 @@
-let userStatus = "unregistred";
 let footer=document.getElementById("footer");
 
 function cookies() {

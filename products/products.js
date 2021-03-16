@@ -4,7 +4,7 @@ var preorders = [];
 var onStock = [];
 var sale = [];
 var used = [];
-fetch('http://127.0.0.1:6996/Cameras')
+fetch('http://127.0.0.1:6969/Cameras')
     .then(function (res) { return res.json(); })
     .then(function (data) {
     var CamProduct = data;
